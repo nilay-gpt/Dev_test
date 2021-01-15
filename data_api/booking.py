@@ -3,6 +3,7 @@ from utils.db import terminating_sn
 
 from models.car import Categories, Cars, Price, BookingDetails
 from models.customers import Customers
+from constants.response_messages import bad_request_status, basic_fraud_message, input_not_valid, bad_request_message
 
 
 class BookingBasics(object):
@@ -91,18 +92,27 @@ class BookingBasics(object):
         Return:
             JSON with success status.
         """
-        with terminating_sn() as session:
-            booking_query = session.query(BookingDetails).filter(BookingDetails.booking_number==int(booking_id)).first()
+        with terminating_sn() as session:    
+            booking_query = session.query(BookingDetails).\
+                filter(BookingDetails.booking_number==int(booking_id)).\
+                first()
+            if not booking_query:
+                raise Exception({"status": bad_request_status, "message": input_not_valid})
+
+            if booking_query.is_completed ==1:
+                raise Exception({"status": bad_request_status, "message": input_not_valid})
+
             car_id = booking_query.car_id
             start_time = booking_query.start_time
 
             car_query = session.query(Cars).filter(Cars.id==car_id).first()
             car_category = car_query.category
             start_km = booking_query.start_km
-
-            # fraud detection.
             number_of_days = int((end_time-start_time)/(24*60*60))
             total_km = end_km - start_km
+            
+            # To check if days and total_km are not in negative, to avoid fraud.
+            FraudDetection.basic_fraud_detection(number_of_days, total_km)
 
             total_fare = FareCalculations.price_calculate(number_of_days, total_km, car_category)
 
@@ -176,3 +186,11 @@ class FareCalculations(object):
 
         trip_fare = trip_fare * 1.7 + (km_price * total_km * 1.5)
         return trip_fare
+
+
+class FraudDetection(object):
+    def basic_fraud_detection(number_of_days, total_km):
+        if number_of_days < 0 or total_km < 0:
+            raise Exception({"status":bad_request_message, "message": basic_fraud_message})
+
+

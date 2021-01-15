@@ -19,14 +19,11 @@ def get_rides():
     """
     This API is responsible for intialisibng the data for Customers, Cars and price inverntory.
     """
-    start_date = 1610900187 #"25 Feb" #2021-01-14 21:36:18
-    end_date =  1610986587 #17-18
-
-    """
-    1 booked : 20 -24 feb
-    2 booked: 1-5 mar
-    """
-
+    # start_date = 1610900187 #"25 Feb" #2021-01-14 21:36:18
+    # end_date =  1610986587 #17-18
+    data = request.values.to_dict()
+    start_date = int(data['start_date'])
+    end_date = int(data['end_date'])
 
     ride_details = BookingBasics.get_available_cars(start_date, end_date)
 
@@ -69,8 +66,8 @@ def end_ride():
     """
     This API is for starting the already booked ride.
     """
-    # end_time = int(time.time())
-    end_time = 1611764187
+    end_time = int(time.time())
+    # end_time = 1611764187
 
     booking_id = request.form.get('booking_id')
     try:
@@ -78,8 +75,11 @@ def end_ride():
     except:
         return False
     current_milage = request.form.get('current_milage')
+    try:
+        response = BookingBasics.end_ride(booking_id, end_km, current_milage, end_time)
+    except Exception as exp:
+        return exp.args[0]
 
-    response = BookingBasics.end_ride(booking_id, end_km, current_milage, end_time)
     return response
 
 
