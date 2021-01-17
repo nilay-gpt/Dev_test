@@ -1,6 +1,6 @@
 from datetime import datetime
-from utils.db import terminating_sn
 
+from utils.db import terminating_sn
 from models.car import Categories, Cars, Price, BookingDetails
 from models.customers import Customers
 from constants.response_messages import bad_request_status, basic_fraud_message, input_not_valid, bad_request_message
@@ -19,10 +19,22 @@ class BookingBasics(object):
         """
         car_data = []
         with terminating_sn() as session:
-            booked_car = session.query(BookingDetails.car_id).filter(BookingDetails.start_time >= start_time).\
-            filter(BookingDetails.end_time <= end_time)
+            q1= session.query(BookingDetails.car_id).filter(BookingDetails.start_time > start_time,
+                                                            BookingDetails.end_time < end_time).all()
+            q2= session.query(BookingDetails.car_id).filter(BookingDetails.start_time < start_time,
+                                                            BookingDetails.end_time < end_time).all()
+            q3= session.query(BookingDetails.car_id).filter(BookingDetails.start_time < start_time,
+                                                            end_time < BookingDetails.end_time).all()
+            q4= session.query(BookingDetails.car_id).filter(BookingDetails.start_time > start_time,
+                                                            end_time > BookingDetails.start_time,
+                                                            end_time < BookingDetails.end_time).all()
 
-            car_list = session.query(Cars).filter(Cars.id.notin_(booked_car)).all()
+            booked_car = q1 + q2 + q3 + q4
+            booked_car_set = set()
+            for car in booked_car:
+                booked_car_set.add(car.car_id)
+
+            car_list = session.query(Cars).filter(Cars.id.notin_(booked_car_set)).all()
 
         for car in car_list:
             local_dict = {}

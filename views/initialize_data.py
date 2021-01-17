@@ -12,17 +12,22 @@ init_blueprint = Blueprint('initialize_data', __name__)
 @init_blueprint.route('/initialize/data', methods=['POST'])
 def migrations():
     """
-    This API is responsible for intialisibng the data for Customers, Cars and price inverntory.
+    This API is responsible for intialisibng the data for Customers, Cars, Category and price inverntory.
     """
-    # cust_response = InitializeData.init_customers()
-    # if not cust_response["success"]:
-    #     return response['msg']
-    # car_resp = InitializeData.init_category()
-    # if not car_resp["success"]:
-    #     return car_resp['msg']
+    # initializing basic customer details.
+    cust_response = InitializeData.init_customers()
+    if not cust_response["success"]:
+        return response['msg']
 
+    # initializing 3 category details.
+    car_resp = InitializeData.init_category()
+    if not car_resp["success"]:
+        return car_resp['msg']
+
+    # initializing common price details.
     InitializeData.init_common_price()
-    # InitializeData.init_car_details()
+    # initializing basic car details.
+    InitializeData.init_car_details()
 
 
     return {"success": True, "msg": "Initial data migrated"}

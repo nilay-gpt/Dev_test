@@ -9,6 +9,7 @@ import json
 import time
 
 from data_api.booking import BookingBasics
+from constants.response_messages import bad_request_status, req_param_missing
 
 
 booking_blueprint = Blueprint('booking', __name__)
@@ -19,11 +20,12 @@ def get_rides():
     """
     This API is responsible for intialisibng the data for Customers, Cars and price inverntory.
     """
-    # start_date = 1610900187 #"25 Feb" #2021-01-14 21:36:18
-    # end_date =  1610986587 #17-18
     data = request.values.to_dict()
-    start_date = int(data['start_date'])
-    end_date = int(data['end_date'])
+    try:
+        start_date = int(data['start_date'])
+        end_date = int(data['end_date'])
+    except KeyError:
+        return {"status": bad_request_status, "message": req_param_missing}
 
     ride_details = BookingBasics.get_available_cars(start_date, end_date)
 
