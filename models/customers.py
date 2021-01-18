@@ -26,4 +26,4 @@ class Customers(Base):
         self.email = email
 
     def __repr__(self):
-        return "Customer created Name={} email={}".format(self.name, self.email)
+        return "Customer Name={} email={}".format(self.name, self.email)

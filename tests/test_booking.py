@@ -125,6 +125,7 @@ class TestBooking(unittest.TestCase):
             self.assertEqual(400, json.loads(end_response.data)['status_code'])
 
 
+
 if __name__ == "__main__":
     unittest.main()
 

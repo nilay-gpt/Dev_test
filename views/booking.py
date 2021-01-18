@@ -40,10 +40,13 @@ def book_ride():
     NOTE: As this feature supports the future booking also so this
             will not start the trip.
     """
-    user = request.form.get('user')
-    reg_number = request.form.get('reg_number')
-    start_time = int(request.form.get('start_time'))
-    end_time = int(request.form.get('end_time'))
+    try:
+        user = request.form.get('user')
+        reg_number = request.form.get('reg_number')
+        start_time = int(request.form.get('start_time'))
+        end_time = int(request.form.get('end_time'))
+    except (KeyError, TypeError):
+        return {"status": bad_request_status, "message": req_param_missing}
 
     response = BookingBasics.book_ride(user, reg_number, start_time, end_time)
 
@@ -56,8 +59,11 @@ def start_ride():
     """
     This API is for starting the already booked ride.
     """
-    booking_id = request.form.get('booking_id')
-    start_km = request.form.get('start_km')
+    try:
+        booking_id = request.form.get('booking_id')
+        start_km = request.form.get('start_km')
+    except (KeyError, TypeError):
+        return {"status": bad_request_status, "message": req_param_missing}
 
     response = BookingBasics.start_ride(booking_id, start_km)
 

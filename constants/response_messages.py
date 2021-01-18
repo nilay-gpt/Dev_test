@@ -6,7 +6,7 @@ internal_server_error = 500
 
 
 # Reponse messages
-success_message = "Requesgt processed successfully"
+success_message = "Request processed successfully"
 bad_request_message = "Bad Request"
 basic_fraud_message = "Trip Days/Total KMs can not be negative."
 input_not_valid = "Reuested arguments are not valid."

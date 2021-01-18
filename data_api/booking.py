@@ -20,12 +20,19 @@ class BookingBasics(object):
         """
         car_data = []
         with terminating_sn() as session:
+            # bookingStartDate > demandStartDate and bookingEndDate < demandEndate
             q1= session.query(BookingDetails.car_id).filter(BookingDetails.start_time > start_time,
                                                             BookingDetails.end_time < end_time).all()
+
+            # bookingStartDate < demandStartDate and bookingEndDate < demandEndate
             q2= session.query(BookingDetails.car_id).filter(BookingDetails.start_time < start_time,
                                                             BookingDetails.end_time < end_time).all()
+
+            # bookingStartDate < demandStartDate and demandEndate < bookingEndDate
             q3= session.query(BookingDetails.car_id).filter(BookingDetails.start_time < start_time,
                                                             end_time < BookingDetails.end_time).all()
+
+            # bookingStartDate > demandStartDate and demandEndate > demandStartDate and demandEndate < bookingEndDate
             q4= session.query(BookingDetails.car_id).filter(BookingDetails.start_time > start_time,
                                                             end_time > BookingDetails.start_time,
                                                             end_time < BookingDetails.end_time).all()
@@ -64,7 +71,7 @@ class BookingBasics(object):
         Return:
              JSON with success status.
         """
-        # renting_days = (datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)).days
+
         renting_days = int((end_time-start_time)/(24*60*60))
 
         if renting_days <0:
@@ -118,6 +125,7 @@ class BookingBasics(object):
         Return:
             JSON with success status.
         """
+
         with terminating_sn() as session:    
             booking_query = session.query(BookingDetails).\
                 filter(BookingDetails.booking_number==int(booking_id)).\
@@ -127,7 +135,6 @@ class BookingBasics(object):
 
             if booking_query.is_completed ==1:
                 raise Exception({"success": False, "status_code": bad_request_status, "message": input_not_valid})
-
             car_id = booking_query.car_id
             start_time = booking_query.start_time
 
@@ -216,6 +223,12 @@ class FareCalculations(object):
 
 class FraudDetection(object):
     def basic_fraud_detection(number_of_days, total_km):
+        """
+        This function will only validate that the number of trip days and total KM are in positive or not.
+        Args:
+            number_of_days: Total number of trip days.
+            total_km: Total trip km.
+        """
         if number_of_days < 0 or total_km < 0:
             raise Exception({"status":bad_request_message,
                 "status_code": bad_request_status,
