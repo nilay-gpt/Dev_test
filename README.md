@@ -1,4 +1,6 @@
-#Rental Car administration.
+
+# Rental Car administration.
+
    This project is for building a Car Rental application. It invloves User, Car and Price data intialization, and then allow user to book the car on rent at any given time.
 
 Steps to run the project:
