@@ -69,7 +69,6 @@ def end_ride():
     This API is for starting the already booked ride.
     """
     end_time = int(time.time())
-    # end_time = 1611764187
 
     booking_id = request.form.get('booking_id')
     try:

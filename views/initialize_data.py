@@ -12,7 +12,7 @@ init_blueprint = Blueprint('initialize_data', __name__)
 @init_blueprint.route('/initialize/data', methods=['POST'])
 def migrations():
     """
-    This API is responsible for intialisibng the data for Customers, Cars, Category and price inverntory.
+    This API is responsible for intialising the data for Customers, Cars, Category and price inverntory.
     """
     # initializing basic customer details.
     cust_response = InitializeData.init_customers()

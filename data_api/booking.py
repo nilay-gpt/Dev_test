@@ -3,7 +3,8 @@ from datetime import datetime
 from utils.db import terminating_sn
 from models.car import Categories, Cars, Price, BookingDetails
 from models.customers import Customers
-from constants.response_messages import bad_request_status, basic_fraud_message, input_not_valid, bad_request_message
+from constants.response_messages import bad_request_status, basic_fraud_message, input_not_valid,\
+                                        bad_request_message, success_status
 
 
 class BookingBasics(object):
@@ -36,6 +37,9 @@ class BookingBasics(object):
 
             car_list = session.query(Cars).filter(Cars.id.notin_(booked_car_set)).all()
 
+        if not car_list:
+            return {"success": True, "msg": success_status, "message":cars_not_available}
+
         for car in car_list:
             local_dict = {}
             local_dict['reg_number'] = car.reg_number
@@ -64,6 +68,8 @@ class BookingBasics(object):
 
         with terminating_sn() as session:
             car_id = session.query(Cars.id).filter(Cars.reg_number==reg_number)
+            if not car_id.all():
+                return {"success": False, "msg": bad_request_status, "message":input_not_valid}
 
             query = BookingDetails(rental_id = user, car_id=car_id, start_time=start_time,
                                    end_time=end_time, renting_days=renting_days)
@@ -71,7 +77,7 @@ class BookingBasics(object):
             session.flush()
             session.commit()
 
-        return {"success": True, "msg": "Ride booked", "booking_id":query.booking_number}
+        return {"success": True, "msg": "Trip booked.", "booking_id": query.booking_number}
 
 
     def start_ride(booking_id, start_km):
@@ -91,7 +97,7 @@ class BookingBasics(object):
             session.flush()
             session.commit()
 
-        return {"success": True, "msg": "Ride started"}
+        return {"success": True, "msg": "Trip started."}
 
     def end_ride(booking_id, end_km, current_milage, end_time):
         """
@@ -109,10 +115,10 @@ class BookingBasics(object):
                 filter(BookingDetails.booking_number==int(booking_id)).\
                 first()
             if not booking_query:
-                raise Exception({"status": bad_request_status, "message": input_not_valid})
+                raise Exception({"success": False, "status": bad_request_status, "message": input_not_valid})
 
             if booking_query.is_completed ==1:
-                raise Exception({"status": bad_request_status, "message": input_not_valid})
+                raise Exception({"success": False, "status": bad_request_status, "message": input_not_valid})
 
             car_id = booking_query.car_id
             start_time = booking_query.start_time
@@ -139,7 +145,7 @@ class BookingBasics(object):
             session.merge(booking_query)
             session.commit()
 
-        return {"success": True, "msg": "Ride started", "total_fare":total_fare}
+        return {"success": True, "msg": "Trip Completed.", "total_fare":total_fare}
 
 
 class FareCalculations(object):
@@ -204,5 +210,3 @@ class FraudDetection(object):
     def basic_fraud_detection(number_of_days, total_km):
         if number_of_days < 0 or total_km < 0:
             raise Exception({"status":bad_request_message, "message": basic_fraud_message})
-
-
