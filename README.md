@@ -27,7 +27,6 @@
 
 1:  Get available cars for rent.
 
-     ```
     Type: Get
     URL: get/rides
     Query Parameters: 
@@ -56,12 +55,11 @@
              ],
              "success": true
          }
-    ```
+
   Description: The above API will fetch the available cars for the mentioned dates.
     
  2: Book Ride.
  
-     ```
      Type: POST
      URL: /book/ride
      Body Parameters:
@@ -76,13 +74,12 @@
                 "msg": "Trip booked.",
                 "success": true
              }
-     ```
+
    Descripton: This API will book the ride for the user for the time period mentioned.
    * Note: This API is supports future and multiple booking in advance, so this will not start the Trip. This API is only for booking/reserving the car for the mentioned dates.
 
 3: Start Ride.
 
-     ```
      Type: PUT
      URL:  /start/ride
      Body Parameters:
@@ -94,12 +91,10 @@
        "msg": "Trip started.",
        "success": true
       }
-     ```
    Descripton: This API is for starting the already booked trip.
   
 4: End Trip.
 
-     ```
      Type: PUT
      URL: /end/ride
      Body Parameters:
@@ -114,6 +109,8 @@
           "total_fare": 34225
          }
       
-     ```
    Descripton: This API is used for ending the already started Trip. In the backend we also calculate the total fare and return in the response while we also update the current of the car with the exsting milage in the DB.
      
+## Running test cases.
+     * export PYTHONPATH= "your project dir."
+     * python ython tests/test_booking.py
