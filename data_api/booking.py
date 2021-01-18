@@ -136,7 +136,7 @@ class BookingBasics(object):
             start_km = booking_query.start_km
             number_of_days = int((end_time-start_time)/(24*60*60))
             total_km = end_km - start_km
-            
+
             # To check if days and total_km are not in negative, to avoid fraud.
             FraudDetection.basic_fraud_detection(number_of_days, total_km)
 
@@ -217,4 +217,7 @@ class FareCalculations(object):
 class FraudDetection(object):
     def basic_fraud_detection(number_of_days, total_km):
         if number_of_days < 0 or total_km < 0:
-            raise Exception({"status":bad_request_message, "message": basic_fraud_message})
+            raise Exception({"status":bad_request_message,
+                "status_code": bad_request_status,
+                "message": basic_fraud_message})
+
