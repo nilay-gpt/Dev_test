@@ -20,15 +20,17 @@
 ## API Details
 
 1:  API intialising the data for Customers, Cars, Category and price inverntory.
-    ```
-    Type: Post
-    URL: initialize/data.   (http://127.0.0.1:5000/initialize/data)
-    Body: Empty
-    ```
+
+     ```
+       Type: Post
+       URL: initialize/data.   (http://127.0.0.1:5000/initialize/data)
+       Body: Empty
+     ```
    Description: The above API will intialize the primary/basic data used for the Application. This API will save the data in Customers, Cars, Car Category and Price table.
 
 2:  Get available cars for rent.
-    ```
+
+     ```
     Type: Get
     URL: get/rides
     Query Parameters: 
@@ -58,9 +60,10 @@
              "success": true
          }
     ```
-    Description: The above API will fetch the available cars for the mentioned dates.
+  Description: The above API will fetch the available cars for the mentioned dates.
     
  3: Book Ride.
+ 
      ```
      Type: POST
      URL: /book/ride
@@ -77,10 +80,11 @@
                 "success": true
              }
      ```
-     Descripton: This API will book the ride for the user for the time period mentioned.
-     Note: This API is supports future and multiple booking in advance, so this will not start the Trip. This API is only for booking/reserving the car for the mentioned dates.
+   Descripton: This API will book the ride for the user for the time period mentioned.
+   * Note: This API is supports future and multiple booking in advance, so this will not start the Trip. This API is only for booking/reserving the car for the mentioned dates.
 
 4: Start Ride.
+
      ```
      Type: PUT
      URL:  /start/ride
@@ -94,9 +98,10 @@
        "success": true
       }
      ```
-     Descripton: This API is for starting the already booked trip.
+   Descripton: This API is for starting the already booked trip.
   
 5: End Trip.
+
      ```
      Type: PUT
      URL: /end/ride
@@ -113,5 +118,5 @@
          }
       
      ```
-     Descripton: This API is used for ending the already started Trip. In the backend we also calculate the total fare and return in the response while we also update the current of the car with the exsting milage in the DB.
+   Descripton: This API is used for ending the already started Trip. In the backend we also calculate the total fare and return in the response while we also update the current of the car with the exsting milage in the DB.
      
