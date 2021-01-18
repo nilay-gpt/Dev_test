@@ -16,19 +16,16 @@
 
 ## Tech Stacks used in the project:
     Python(3.6), Flask(1.1.2), SQLAlchemy(1.3.19), SQLite
+    
+
+## Data initialization
+
+   While running the app for the first time on the new ENV it will initialize the Customers, Cars, Car Category and the Price table.
+
 
 ## API Details
 
-1:  API intialising the data for Customers, Cars, Category and price inverntory.
-
-     ```
-       Type: Post
-       URL: initialize/data.   (http://127.0.0.1:5000/initialize/data)
-       Body: Empty
-     ```
-   Description: The above API will intialize the primary/basic data used for the Application. This API will save the data in Customers, Cars, Car Category and Price table.
-
-2:  Get available cars for rent.
+1:  Get available cars for rent.
 
      ```
     Type: Get
@@ -62,7 +59,7 @@
     ```
   Description: The above API will fetch the available cars for the mentioned dates.
     
- 3: Book Ride.
+ 2: Book Ride.
  
      ```
      Type: POST
@@ -83,7 +80,7 @@
    Descripton: This API will book the ride for the user for the time period mentioned.
    * Note: This API is supports future and multiple booking in advance, so this will not start the Trip. This API is only for booking/reserving the car for the mentioned dates.
 
-4: Start Ride.
+3: Start Ride.
 
      ```
      Type: PUT
@@ -100,7 +97,7 @@
      ```
    Descripton: This API is for starting the already booked trip.
   
-5: End Trip.
+4: End Trip.
 
      ```
      Type: PUT
