@@ -32,6 +32,7 @@ def get_rides():
 
     return {"success": True, "available_cars": ride_details}
 
+
 @booking_blueprint.route('/book/ride', methods=['POST'])
 def book_ride():
     """
@@ -75,6 +76,7 @@ def end_ride():
         end_km = float(request.form.get('end_km'))
     except:
         return False
+
     current_milage = request.form.get('current_milage')
     try:
         response = BookingBasics.end_ride(booking_id, end_km, current_milage, end_time)
